@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Just From My Heart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background: #ffe6ea;
+            color: #b3003b;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        h1 {
+            margin-bottom: 15px;
+        }
+
+        .question {
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            background: #ff4d6d;
+            color: white;
+            font-size: 1em;
+        }
+
+        textarea {
+            width: 95%;
+            height: 100px;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            resize: none;
+        }
+
+        .sorry-text {
+            font-size: 0.95em;
+            color: #444;
+            text-align: left;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        #submit-btn {
+            display: none;
+        }
+
+        #final {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Just One Honest Moment</h1>
+
+    <div id="q1" class="question">
+        Do you like me?
+        <br>
+        <button onclick="yes(1)">Yes</button>
+        <button onclick="no(1)">No</button>
+    </div>
+
+    <div id="q2" class="question" style="display:none;">
+        Do you love me?
+        <br>
+        <button onclick="yes(2)">Yes</button>
+        <button onclick="no(2)">No</button>
+    </div>
+
+    <div id="q3" class="question" style="display:none;">
+        <div class="sorry-text">
+            We’ve known each other for years, but honestly last year was my worst.
+            Because of ego, silence, and misunderstanding, we slowly stopped talking properly.<br><br>
+
+            This is our 4th year now, and a new year has begun.
+            I don’t know what’s in your mind, but I want this year to be better.
+            I want us to talk openly, without ignoring, without ego.<br><br>
+
+            So before anything else… I just want to say sorry.
+            Please tell me honestly how you feel about me.
+        </div>
+
+        <textarea id="feelings" placeholder="Write whatever is in your heart..."></textarea>
+        <br>
+        <button id="submit-btn" onclick="submitFeelings()">Submit</button>
+    </div>
+
+    <div id="final"></div>
+
+    <!-- Hidden Email Form -->
+    <form id="sendForm"
+          action="https://formsubmit.co/YOUR_EMAIL@gmail.com"
+          method="POST"
+          style="display:none;">
+        <input type="hidden" name="Liked Me" id="liked">
+        <input type="hidden" name="Loved Me" id="loved">
+        <input type="hidden" name="Feelings" id="feelingsText">
+        <input type="hidden" name="_subject" value="Her Feelings">
+        <input type="hidden" name="_captcha" value="false">
+    </form>
+
+</div>
+
+<script>
+    let liked = "";
+    let loved = "";
+    let negative = false;
+
+    function yes(q) {
+        if (q === 1) liked = "Yes";
+        if (q === 2) loved = "Yes";
+        next(q);
+    }
+
+    function no(q) {
+        negative = true;
+        if (q === 1) liked = "No";
+        if (q === 2) loved = "No";
+        document.body.style.background = "#e6f0ff";
+        document.body.style.color = "#003366";
+        next(q);
+    }
+
+    function next(q) {
+        document.getElementById("q" + q).style.display = "none";
+        let nextQ = document.getElementById("q" + (q + 1));
+        if (nextQ) {
+            nextQ.style.display = "block";
+            if (q + 1 === 3) {
+                document.getElementById("submit-btn").style.display = "inline-block";
+            }
+        }
+    }
+
+    function submitFeelings() {
+        let text = document.getElementById("feelings").value;
+
+        document.getElementById("liked").value = liked;
+        document.getElementById("loved").value = loved;
+        document.getElementById("feelingsText").value = text;
+
+        document.getElementById("sendForm").submit();
+
+        document.getElementById("q3").style.display = "none";
+        document.getElementById("final").innerHTML =
+            negative
+            ? "Thank you for being honest. I respect your feelings."
+            : "Thank you for opening your heart.";
+    }
+</script>
+
+</body>
+</html>
